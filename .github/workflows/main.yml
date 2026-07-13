@@ -1,0 +1,29 @@
+name: Kuvaj Keenetic FIP
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Instalacija alata
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gcc-aarch64-linux-gnu device-tree-compiler git python3
+
+      - name: Kloniranje i kompajliranje
+        run: |
+          # Popravljena adresa za kloniranje:
+          git clone https://github.com/hanwckf/bl-mt798x.git
+          cd bl-mt798x
+          chmod +x build.sh
+          
+          # Dodat parametar za DDR4 memoriju koja je u tvom KN-1012:
+          SOC=mt7981 BOARD=rfb MULTI_LAYOUT=0 ddr_type=ddr4 ./build.sh
+
+      - name: Slanje gotovog FIP fajla
+        uses: actions/upload-artifact@v4
+        with:
+          name: Keenetic-Hero-FIP
+          # Promenjena ekstenzija jer hanwckf izbacuje .bin za bl2 i .fip za bootloader
+          path: bl-mt798x/output/*
