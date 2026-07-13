@@ -6,7 +6,6 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      # Fabrička prečica koja sama bezbedno skida hanwckf kod bez kucanja linkova:
       - name: Skupljanje koda
         uses: actions/checkout@v4
         with:
@@ -20,8 +19,8 @@ jobs:
       - name: Kompajliranje
         run: |
           chmod +x build.sh
-          # Tvoja tačna komanda za MT7981 DDR4 ploču:
-          SOC=mt7981 BOARD=rfb-ddr4 ./build.sh
+          # Popravljena komanda koja koristi tacnu rfb plocu i ddr4 promenljivu:
+          SOC=mt7981 BOARD=rfb MULTI_LAYOUT=0 ddr_type=ddr4 ./build.sh
 
       - name: Slanje gotovog FIP fajla
         uses: actions/upload-artifact@v4
